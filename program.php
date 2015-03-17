@@ -1,7 +1,7 @@
 <?php
 include 'wiki-mirror.inc.php';
 $title="State_Of_The_Map_2014";
-
+$friendly_title = "State Of The Map 2014 Program";
 include 'header.php';
 ?>
 <div id="accomodation" class="row block">

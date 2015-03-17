@@ -1,4 +1,5 @@
 <?php
+$friendly_title = "State Of The Map 2014 Venue";
 include('header.php');
 ?>
 

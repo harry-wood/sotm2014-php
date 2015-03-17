@@ -1,4 +1,5 @@
 <?php
+$friendly_title = "State Of The Map 2014";
 include('header.php');
 ?>
   <div class="row banner" style="padding-top:75px;">

@@ -6,13 +6,13 @@ if ($title=="") die('title param required');
 $title = "SotM_2014_session:_" . $title;
 
 $content = wiki_mirror($title);    
-
+$friendly_title = htmlspecialchars(friendly_title($title));
 include 'header.php';
 ?>
 <div class="row block">
   <div class="col-xs-12 col-sm-12">
   <h1 class=""><i class="fa fa-map-marker" style="color:rgba(237, 28, 36, 0.75)"></i>
-  <?php echo htmlspecialchars(friendly_title($title)); ?></h1>
+  <?php echo $friendly_title ?></h1>
     
     <div id="" class="row block same-height" style="background:white">
 <?php
