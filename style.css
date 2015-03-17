@@ -1,0 +1,202 @@
+BODY, P, H1, H2, H3, H4, H5, H6, LI, TD, TH, DD, DT {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	color: black;
+}
+
+
+
+table.navbox {            /* Navbox container style */
+  border: 1px solid #aaa;
+  width: 100%; 
+  margin: auto;
+  clear: both;
+  font-size: 88%;
+  text-align: center;
+  padding: 1px;
+}
+table.navbox + table.navbox {  /* Single pixel border between adjacent navboxes */
+  margin-top: -1px;            /* (doesn't work for IE6, but that's okay)       */
+}
+.navbox-title,
+.navbox-abovebelow,
+table.navbox th {
+  text-align: center;      /* Title and above/below styles */
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.navbox-group {            /* Group style */
+  white-space: nowrap;
+  text-align: right;
+  font-weight: bold;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.navbox, .navbox-subgroup {
+  background: #fdfdfd;     /* Background color */
+}
+.navbox-list {
+  border-color: #fdfdfd;   /* Must match background color */
+}
+.navbox-title,
+table.navbox th {
+  background: #ccccff;     /* Level 1 color */
+}
+.navbox-abovebelow,
+.navbox-group,
+.navbox-subgroup .navbox-title {
+  background: #ddddff;     /* Level 2 color */
+}
+.navbox-subgroup .navbox-group, .navbox-subgroup .navbox-abovebelow {
+  background: #e6e6ff;     /* Level 3 color */
+}
+.navbox-even {
+  background: #f7f7f7;     /* Even row striping */
+}
+.navbox-odd {
+  background: transparent; /* Odd row striping */
+}
+ 
+.collapseButton {          /* 'show'/'hide' buttons created dynamically */
+    float: right;          /* by the CollapsibleTables javascript in    */
+    font-weight: normal;   /* [[MediaWiki:Common.js]]are styled here    */
+    text-align: right;     /* so they can be customised.                */
+    width: auto;
+}
+.navbox .collapseButton {  /* In navboxes, the show/hide button balances */
+    width: 6em;            /* the vde links from [[Template:Tnavbar]],   */
+}                          /* so they need to be the same width.         */
+ 
+/* Stylesheet-Ergänzung zu Standard-[[Wikipedia:Navigationsleisten|Navigationsleisten]] */
+ 
+div.BoxenVerschmelzen,
+div.NavFrame {
+    margin: 0px;
+    padding: 2px;
+    border: 1px solid #aaaaaa;
+    text-align: center;
+    border-collapse: collapse;
+    font-size: 95%;
+    clear:both;
+}
+div.BoxenVerschmelzen div.NavFrame {
+   border-style: none;
+   border-style: hidden;
+}
+div.NavFrame + div.NavFrame {
+   border-top-style: none;
+   border-top-style: hidden;
+}
+div.NavPic {
+   background-color: #ffffff;
+    margin: 0px;
+    padding: 2px;
+    float: left;
+ }
+div.NavFrame div.NavHead {
+   font-weight: bold;
+   font-size: 100%;
+   background-color: #efefef;
+}
+div.NavFrame p {
+   font-size: 100%;
+}
+div.NavFrame div.NavContent {
+   font-size: 100%;
+}
+div.NavFrame div.NavContent p {
+   font-size: 100%;
+}
+div.NavEnd {
+   margin: 0px;
+   padding: 0px;
+   line-height: 1px;
+   clear: both;
+}
+ 
+/* Stylesheet fuer den 'Ausklappen'-Button an Navileisten, der in [[MediaWiki:Common.js]] implementiert wird */
+.NavToggle {
+    font-size: x-small;
+    float:right;
+}
+ 
+/* Workaround für Internet Explorer 6 */
+div.NavFrame, div.NavPic, .NavToggle {
+    position:relative;
+}
+ 
+/* Abstand vor Navigationsleisten */
+ 
+div.BoxenVerschmelzen,
+div.NavFrame {
+  margin-top: 1.5em;
+}
+div.BoxenVerschmelzen div.NavFrame {
+  margin-top: 0;
+}
+div.NavFrame + div.NavFrame {
+  margin-top: 0;
+}
+ 
+/* Navigationsleisten nicht mit ausdrucken */
+ 
+@media print{
+   .NavFrame {
+       display: none;
+   }
+   .BoxenVerschmelzen {
+       display: none;
+   }
+}
+ 
+/* Should be removed after update to MW 1.16 */
+.mw-plusminus-pos { color: #006400 }
+.mw-plusminus-neg { color: #8B0000 }
+ 
+/* Wikitable moved from Monobook.css */
+/* define the 'wikitable' css class to make wiki table formatting easier */
+TABLE.wikitable {
+   border-style:solid;
+   border-width:1px;
+   border-color:#aaa;
+   background: #f9f9f9;
+   border-collapse: collapse;
+   font-size: 95%;
+}
+ 
+TABLE.wikitable TD {
+   padding:4px;
+   border-style:solid;
+   border-width:1px;
+   border-color:#aaa;
+}
+TABLE.wikitable TH {
+   padding:4px;
+   background-color:#E9E9E9;
+   border-style:solid;
+   border-width:1px;
+   border-color:#aaa;
+}
+ 
+tt { 
+   font-size: 115%;
+}
+ 
+div.mw-geshi {
+   background-color: #F9F9F9;
+   border: 1px dashed #2F6FAB;
+   color: black;
+   line-height: 1.1em;
+   padding: 1em;
+   font: 1em/1.2em monospace;
+   font-size: 1.2em;
+}
+ 
+pre {
+   font-size: 1.2em;
+}
+
+
+a.new {
+   color:#900;
+   text-decoration:none;
+}
