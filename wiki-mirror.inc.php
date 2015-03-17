@@ -30,7 +30,7 @@ function get_url($url) {
   if ($content===FALSE) die("Failed to get page: <a href='$url'>$url</a>");
   if (strlen($content)==0) die("Empty string fetching url $url");
   if (strlen($content)<100) die("Content too short $url");
-  
+  if (strpos($content, 'There is currently no text in this page') !== FALSE) die("Wiki page doesn't exist");
   return $content;
 }
 function get_curl_style($url) {
