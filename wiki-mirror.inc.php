@@ -1,5 +1,5 @@
 <?php
-$CACHEDIR = "contentcache/";
+$CACHEDIR = "/tmp/contentcache/";
 
 $allowedPrefixes = array(
   "SotM_2014_session:");
@@ -44,14 +44,11 @@ function get_curl_style($url) {
   return $data;
 }
 
-function get_filecontent_style() {	
-  //$user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36";
-  //$options  = array('http' => array('user_agent' => $user_agent ));
-  //$context  = stream_context_create($options); 
-  //$response = file_get_contents($url, false, $context);
-
-  $response = file_get_contents($url);
-  
+function get_filecontent_style($url) {	
+  $user_agent = "Harry's wiki scraping script, PHP";
+  $options  = array('http' => array('user_agent' => $user_agent ));
+  $context  = stream_context_create($options); 
+  $response = file_get_contents($url, false, $context);
   return $response;
 }
 
@@ -100,7 +97,9 @@ function wiki_mirror($title) {
   
   
   $time_start = microtime(true);
-     
+  
+  if (!file_exists($CACHEDIR)) mkdir($CACHEDIR, 0777, true);
+
   
   if (!file_exists($file) || filesize($file)==0 ||  time()- filemtime($file) > 10 * 60 ) {
     print "<!-- CALLING URL $url -->\n";
@@ -108,6 +107,7 @@ function wiki_mirror($title) {
     $content = get_url($url);
     
     //write cache file
+    
     file_put_contents($file, $content);
    
   } else {
