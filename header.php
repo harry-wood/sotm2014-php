@@ -58,7 +58,11 @@ function init() {
   }).setView([-34.57158, -58.43926], 12);
   L.tileLayer(tiles[Math.floor(Math.random() * tiles.length)], {
     maxZoom: 12
-  }).addTo(artmap); 
+  }).addTo(artmap);
+  
+  
+  //webkit fix http://stackoverflow.com/a/9513843/338265
+  document.body.style.webkitTransform = 'scale(1)';
 }
     </script>
     
