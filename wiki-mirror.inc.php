@@ -1,5 +1,7 @@
 <?php
-$CACHEDIR = "/tmp/contentcache/";
+//Set $CACHEDIR to a writable file path e.g. "/tmp/contentchace"
+//or to 'false' to disabling file caching (all requests proxied)
+$CACHEDIR = false;
 
 $allowedPrefixes = array(
   "SotM_2014_session:");
@@ -91,25 +93,24 @@ function wiki_mirror($title) {
   
   $url = "http://wiki.openstreetmap.org/wiki/" . $urlTitle . "?script=harrys-SOTM-scraper";
   
+  if ($CACHEDIR!==false) { 
+    $fileTitle = str_replace("/", "--", $title);
+    $file = $CACHEDIR . $fileTitle . ".html";
   
-  $fileTitle = str_replace("/", "--", $title);
-  $file = $CACHEDIR . $fileTitle . ".html";
-  
-  
+    if (!file_exists($CACHEDIR)) mkdir($CACHEDIR, 0777, true);
+  }
+
   $time_start = microtime(true);
   
-  if (!file_exists($CACHEDIR)) mkdir($CACHEDIR, 0777, true);
-
-  
-  if (!file_exists($file) || filesize($file)==0 ||  time()- filemtime($file) > 10 * 60 ) {
+  if ($CACHEDIR===false || !file_exists($file) || filesize($file)==0 ||  time()- filemtime($file) > 10 * 60 ) {
     print "<!-- CALLING URL $url -->\n";
     
     $content = get_url($url);
     
-    //write cache file
-    
-    file_put_contents($file, $content);
-   
+    if ($CACHEDIR!==false) {
+      //write cache file
+      file_put_contents($file, $content);
+    }
   } else {
     print "<!-- GETTING FROM CACHE $file -->\n";
     $content = file_get_contents($file);
