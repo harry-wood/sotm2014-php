@@ -1,3 +1,0 @@
-Options +FollowSymlinks
-RewriteEngine on
-RewriteRule ^(.*)\.session$ session.php?file=$1.php [NC]
