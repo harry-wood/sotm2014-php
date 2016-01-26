@@ -28,7 +28,7 @@ function get_url($url) {
   } else {
     $content = get_filecontent_style($url);
   }
-  
+
   if ($content===FALSE) die("Failed to get page: <a href='$url'>$url</a>");
   if (strlen($content)==0) die("Empty string fetching url $url");
   if (strlen($content)<100) die("Content too short $url");
@@ -36,20 +36,20 @@ function get_url($url) {
   return $content;
 }
 function get_curl_style($url) {
-  $ch = curl_init(); 
-  curl_setopt($ch, CURLOPT_URL, $url ); 
-  curl_setopt($ch, CURLOPT_HEADER, 1); 
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-  $data = curl_exec($ch); 
-  curl_close($ch); 
-  
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url );
+  curl_setopt($ch, CURLOPT_HEADER, 1);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  $data = curl_exec($ch);
+  curl_close($ch);
+
   return $data;
 }
 
-function get_filecontent_style($url) {	
+function get_filecontent_style($url) {
   $user_agent = "Harry's wiki scraping script, PHP";
   $options  = array('http' => array('user_agent' => $user_agent ));
-  $context  = stream_context_create($options); 
+  $context  = stream_context_create($options);
   $response = file_get_contents($url, false, $context);
   return $response;
 }
@@ -59,7 +59,7 @@ function page_type($title) {
   $pageType = "DISALLOW";
   foreach ($sessionListPages as $allowedTitle) {
     if ($title==$allowedTitle) $pageType = "SESSIONLIST";
-  } 
+  }
   foreach ($allowedPrefixes as $prefix) {
     if (startsWith($title, $prefix)) $pageType = "SESSION";
   }
@@ -76,37 +76,44 @@ function friendly_title($title) {
     foreach ($allowedPrefixes as $prefix) {
       if (startsWith($title, $prefix)) {
         $friendly_title = str_replace($prefix,"Session: ",$friendly_title);
-      } 
+      }
     }
     $friendly_title = str_replace("_"," ",$friendly_title);
     return $friendly_title;
   }
 }
 
+// Main function called in-page
+// This has the cache wrapping logic before calling wiki_mirror_content
 function wiki_mirror($title) {
   global $CACHEDIR, $allowedPrefixes, $sessionListPages;
-  
+
   $error = "";
-  
+
   $urlTitle = urlencode($title);
   $urlTitle = str_replace("%2F", "/", $title);
-  
+
   $url = "http://wiki.openstreetmap.org/wiki/" . $urlTitle . "?script=harrys-SOTM-scraper";
-  
-  if ($CACHEDIR!==false) { 
+
+  if ($CACHEDIR!==false) {
     $fileTitle = str_replace("/", "--", $title);
     $file = $CACHEDIR . $fileTitle . ".html";
-  
+
     if (!file_exists($CACHEDIR)) mkdir($CACHEDIR, 0777, true);
   }
 
   $time_start = microtime(true);
-  
+
   if ($CACHEDIR===false || !file_exists($file) || filesize($file)==0 ||  time()- filemtime($file) > 10 * 60 ) {
     print "<!-- CALLING URL $url -->\n";
-    
+
     $content = get_url($url);
-    
+
+    $pageType = page_type($title);
+    if ($pageType=="DISALLOW") die("Bad wiki title. We're not mirroring that");
+
+    $content = wiki_mirror_content($content, $pageType);
+
     if ($CACHEDIR!==false) {
       //write cache file
       file_put_contents($file, $content);
@@ -115,25 +122,24 @@ function wiki_mirror($title) {
     print "<!-- GETTING FROM CACHE $file -->\n";
     $content = file_get_contents($file);
   }
-  
+
   $time = microtime(true) - $time_start;
   print "<!-- Got content in $time seconds -->\n";
-     
-  
-  chompleft($content, "class=\"mw-content-ltr\">");
-  
-  chompright($content, "<div class=\"printfooter\">");
-  
 
-  $pageType = page_type($title);
-   
-  if ($pageType=="DISALLOW") die("Bad wiki title. We're not mirroring that");
-  
-  
+  return $content;
+}
+
+// Main mirror logic
+// Pass raw HTML as scraped from the wiki.
+function wiki_mirror_content($content, $pageType) {
+  global $allowedPrefixes, $sessionListPages;
+  chompleft($content, "class=\"mw-content-ltr\">");
+
+  chompright($content, "<div class=\"printfooter\">");
+
   if ($pageType =="SESSIONLIST") {
-  
     $possibleHeadings = array("Sessions", "Sessions list", "Program", "Programme", "Conference Program");
-    
+
     $found=false;
     foreach ($possibleHeadings as $heading) {
       $startheading = "<span class=\"mw-headline\" id=\"" . str_replace(" ","_",$heading) . "\">$heading</span>";
@@ -143,21 +149,21 @@ function wiki_mirror($title) {
       }
     }
     if ($found==false) die("Missing sessions heading");
-  
+
     //Following after the span there's a h3 tag (or different level) remove it
     if (substr($content, 2,1)!="h") die("expected h tag");
-  
+
     $htag = "<" . substr($content, 2, 3);
     $content = substr($content, 5, strlen($content) );
-    
+
     chompright($content, $htag, false); //And look for the same level heading to end on
-  
+
     // Check for (optional) better things to right trim down to
     chompright($content, "<br />\n<br />", false);
     chompright($content, "<div style=\"text-align:center; clear:both; border: 2px solid black;\">", false );
-    
+
   } else if ($pageType == "SESSION") {
-   
+
     //Remove green box panel if present
     $panelStart = "border:solid; border-width:2px; background-color:#E0EEE0; border-color:#666666;\">";
     $panelpos = strpos($content, $panelStart);
@@ -165,27 +171,23 @@ function wiki_mirror($title) {
       chompleft($content, $panelStart);
       chompleft($content, "</table>");
     }
-   
   }
-  
-  
+
   //Lose the rel=nofollows. Assume we're spam free and let's give some google love
   $content = str_replace(" rel=\"nofollow\"", "", $content);
-  
+
   //Add target="_top" for all links. This gets undone below for the internal links
   $content = str_replace(" href=\"",    " target=\"_top\" href=\"", $content);
-  
+
   //Change links to stay here on the scraper, for any link to a wiki pages which we are mirroring
   foreach ($allowedPrefixes as $prefix) {
-     $content = str_replace(" target=\"_top\" href=\"/wiki/" . $prefix . "_", " href=\"./session.php?title=", $content);
-  } 
-  
+    $content = str_replace(" target=\"_top\" href=\"/wiki/" . $prefix . "_", " href=\"./session.php?title=", $content);
+  }
+
   //All other wiki pages...  link the actual wiki
   $content = str_replace(" href=\"/wiki/",    " href=\"http://wiki.openstreetmap.org/wiki/", $content);
   $content = str_replace(" href=\"/w/",       " href=\"http://wiki.openstreetmap.org/w/", $content);
   $content = str_replace(" src=\"/w/images/", " src=\"http://wiki.openstreetmap.org/w/images/", $content);
-  
+
   return $content;
 }
-
-
