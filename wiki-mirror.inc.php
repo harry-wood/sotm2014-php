@@ -3,6 +3,10 @@
 //or to 'false' to disabling file caching (all requests proxied)
 $CACHEDIR = false;
 
+$CACHEONLY = false; //If you want to disable all new wiki scraping
+
+$CACHE_TIMEOUT = 60 * 10; //in seconds
+
 $allowedPrefixes = array(
   "SotM_2014_session:");
 
@@ -86,7 +90,7 @@ function friendly_title($title) {
 // Main function called in-page
 // This has the cache wrapping logic before calling wiki_mirror_content
 function wiki_mirror($title) {
-  global $CACHEDIR, $allowedPrefixes, $sessionListPages;
+  global $CACHEDIR, $CACHE_TIMEOUT, $CACHEONLY, $allowedPrefixes, $sessionListPages;
 
   $error = "";
 
@@ -104,13 +108,15 @@ function wiki_mirror($title) {
 
   $time_start = microtime(true);
 
-  if ($CACHEDIR===false || !file_exists($file) || filesize($file)==0 ||  time()- filemtime($file) > 10 * 60 ) {
+  if ($CACHEDIR===false || !file_exists($file) || filesize($file)==0 ||  time()- filemtime($file) > $CACHE_TIMEOUT ) {
     print "<!-- CALLING URL $url -->\n";
 
     $content = get_url($url);
 
     $pageType = page_type($title);
     if ($pageType=="DISALLOW") die("Bad wiki title. We're not mirroring that");
+
+    if ($CACHEONLY==true) die("Sorry. Wiki scraping disabled. The URL we would've tried is $url");
 
     $content = wiki_mirror_content($content, $pageType);
 
