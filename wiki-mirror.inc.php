@@ -1,11 +1,11 @@
 <?php
 //Set $CACHEDIR to a writable file path e.g. "/tmp/contentchace"
 //or to 'false' to disabling file caching (all requests proxied)
-$CACHEDIR = false;
+$CACHEDIR = './cache/';
 
-$CACHEONLY = false; //If you want to disable all new wiki scraping
+$CACHEONLY = true; //If you want to disable all new wiki scraping
 
-$CACHE_TIMEOUT = 60 * 10; //in seconds
+$CACHE_TIMEOUT = 60 * 24 * 365 * 9999; //in seconds
 
 $allowedPrefixes = array(
   "SotM_2014_session:");
