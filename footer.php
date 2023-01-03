@@ -3,7 +3,7 @@
   <div class="col-md-12">
     Map data &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL), &hearts; <a class="donate-attr" href="http://donate.openstreetmap.org">Donate</a>, Tiles &copy; Mapbox, Logo made by M. Inés Szychowski and licensed under <a rel="license" href="//creativecommons.org/licenses/by/4.0/"> Creative Commons Attribution 4.0 International license</a>.
     </br>
-    Originally powered by <a href="https://github.com/osm-ar/libreconf" target="_blank" title="Fork me!">libreconf</a>, Developed by <a href="http://openstreetmap.org.ar" title="OpenStreetMap Argentina">OSM-Ar</a> &amp; <a href="https://www.facebook.com/GeoinquietosArgentina" title="Geoinquietos Argentina">Geoinquietos</a>.
+    Originally powered by <a href="https://github.com/osm-ar/libreconf" target="_blank" title="Fork me!">libreconf</a>, Developed by <a href="http://openstreetmap.org.ar" title="OpenStreetMap Argentina">OSM-Ar</a> &amp; <a href="https://www.facebook.com/GeoinquietosArgentina" title="Geoinquietos Argentina">Geoinquietos</a>, this is now powered by a <a href="https://github.com/harry-wood/sotm2014-php/">simplified php rewrite</a> by Harry Wood. 
   </div>
 </div>
 
