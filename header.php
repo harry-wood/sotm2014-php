@@ -43,7 +43,7 @@ function init() {
       scrollWheelZoom: false
     }).setView(latlng, 15);
     
-    L.tileLayer('http://{s}.tiles.mapbox.com/v3/fernando.h0p1dck9/{z}/{x}/{y}.png', {
+    L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
     }).addTo(map);
     
