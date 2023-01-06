@@ -21,14 +21,14 @@
     <![endif]-->
 
     <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon" />
-    
+
     <link href="./assets/application.css" media="all" rel="stylesheet" />
     <link href="./assets/font-awesome.css" media="all" rel="stylesheet" />
-    
+
     <link href="./assets/leaflet.css" media="all" rel="stylesheet" />
-   
+
     <link rel="stylesheet" type=text/css href="./style.css">
-    
+
     <script src="./assets/leaflet.js"></script>
     <script>
 //Init the page (maps)
@@ -37,16 +37,15 @@ function init() {
 
   latlng = [-34.59359, -58.38327];
 
-  
-  if (document.getElementById("venuemap")) { 
-    map = L.map('venuemap', {                    
+  if (document.getElementById("venuemap")) {
+    map = L.map('venuemap', {
       scrollWheelZoom: false
     }).setView(latlng, 15);
-    
-    L.tileLayer('http://{s}.tiles.mapbox.com/v3/fernando.h0p1dck9/{z}/{x}/{y}.png', {
+
+    L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
     }).addTo(map);
-    
+
     marker = L.marker(latlng).addTo(map);
     marker.bindPopup(venueAddress).openPopup();
   }
@@ -59,13 +58,11 @@ function init() {
   L.tileLayer(tiles[Math.floor(Math.random() * tiles.length)], {
     maxZoom: 12
   }).addTo(artmap);
-  
-  
+
   //webkit fix http://stackoverflow.com/a/9513843/338265
   document.body.style.webkitTransform = 'scale(1)';
 }
     </script>
-    
   </head>
 
 <body onLoad="init();">
@@ -99,5 +96,3 @@ function init() {
     </ul>
   </div>
 </div>
-
-
